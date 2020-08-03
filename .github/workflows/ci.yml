@@ -12,9 +12,6 @@ jobs:
           - os: ubuntu-latest
             artifact_name: closewait-ubuntu
             asset_name: closewait-ubuntu-amd64
-          - os: centos-latest
-            artifact_name: closewait-centos
-            asset_name: closewait-centos-amd64
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
