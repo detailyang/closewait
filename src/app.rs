@@ -37,14 +37,14 @@ impl App {
 
             if self.opt.verbose > 0 {
                 println!(
-                    "pid({}) {:?} sockets took {} millisecs",
+                    "close pid({}) with {:?} sockets took {} milliseconds",
                     self.opt.pid,
                     b.len(),
                     elapsed.as_millis()
                 );
             } else {
                 println!(
-                    "pid({}) {} sockets took {} millisecs",
+                    "close pid({}) with {} sockets took {} milliseconds",
                     self.opt.pid,
                     b.len(),
                     elapsed.as_millis()
@@ -92,16 +92,27 @@ impl App {
 pub struct Opt {
     // The number of occurrences of the `v/verbose` flag
     /// Verbose mode (-v, -vv, -vvv, etc.)
-    #[structopt(short, long, parse(from_occurrences))]
+    #[structopt(short, long, parse(from_occurrences), help = "Enable verbose mode")]
     verbose: u8,
 
     #[structopt(short, long)]
     pid: i32,
 
-    #[structopt(short, long, default_value = "512")]
+    #[structopt(
+        short,
+        long,
+        default_value = "1024",
+        help = "The number of sockets batch close"
+    )]
     batch: usize,
 
-    #[structopt(short, long, default_value = "500ms", parse(try_from_str = parse_duration))]
+    #[structopt(
+        short,
+        long,
+        default_value = "1s",
+        parse(try_from_str = parse_duration),
+        help = "The interval to close sockets"
+    )]
     interval: time::Duration,
 }
 
