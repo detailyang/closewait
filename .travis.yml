@@ -17,16 +17,14 @@ services:
   - docker
 
 before_install:
-  - sudo yum install -y centos-release-scl
-  - sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
-  - sudo yum install -y llvm-toolset-7.0 llvm-toolset-7.0-*
-  - docker pull docker.pkg.github.com/detailyang/dotfiles/centos7
+  - docker pull docker.pkg.github.com/detailyang/dotfiles/centos7:1.0.1
 
 install:
   - docker run -it -v $(pwd):/app docker.pkg.github.com/detailyang/dotfiles/centos7 /bin/bash -c "scl enable llvm-toolset-7.0 bash && cargo build --release"
   - mv target/release/closewait "target/release/closewait-centos7-amd64"
+  - cargo build --release
+  - mv target/release/closewait "target/release/closewait-ubuntu-amd64"
 before_deploy:
-
 deploy:
   - provider: releases
     api_key: "$GH_TOKEN"
