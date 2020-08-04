@@ -17,7 +17,7 @@ services:
   - docker
 
 before_install:
-  - docker pull docker.pkg.github.com/detailyang/dotfiles/centos7:1.0.1
+  - docker pull docker.io/detailyang/centos7:1.0.1
 
 install:
   - docker run -it -v $(pwd):/app docker.pkg.github.com/detailyang/dotfiles/centos7 /bin/bash -c "scl enable llvm-toolset-7.0 bash && cargo build --release"
