@@ -1,0 +1,39 @@
+language: rust
+sudo: true
+os:
+  - linux
+dist: focal
+arch:
+    - amd64
+rust:
+  - stable
+matrix:
+  allow_failures:
+    - rust: nightly
+  fast_finish: true
+jobs:
+  fast_finish: true
+services:
+  - docker
+
+before_install:
+  - sudo yum install -y centos-release-scl
+  - sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
+  - sudo yum install -y llvm-toolset-7.0 llvm-toolset-7.0-*
+  - docker pull docker.pkg.github.com/detailyang/dotfiles/centos7
+
+install:
+  - docker run -it -v $(pwd):/app docker.pkg.github.com/detailyang/dotfiles/centos7 /bin/bash -c "scl enable llvm-toolset-7.0 bash && cargo build --release"
+  - mv target/release/closewait "target/release/closewait-centos7-amd64"
+before_deploy:
+
+deploy:
+  - provider: releases
+    api_key: "$GH_TOKEN"
+    skip_cleanup: true
+    on:
+      tags: on
+      condition: "$TRAVIS_RUST_VERSION = stable"
+      branch: master
+    file_glob: true # <-- note this new field
+    file: target/release/closewait-*  # <-- note the `-*`
