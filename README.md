@@ -11,7 +11,7 @@
 
 # Purpose
 
-Kill the close-wait sockets via [procfs](https://man7.org/linux/man-pages//man5/procfs.5.html) in low version kernel which is do not have [SOCK Destory](https://lwn.net/Articles/666592/) feature.
+Kill the close-wait sockets via [procfs](https://man7.org/linux/man-pages//man5/procfs.5.html) like `ss state CLOSE-WAIT --kill` in low version kernel which is do not have [SOCK Destory](https://lwn.net/Articles/666592/) kernel feature.
 
 # Usage
 
@@ -40,7 +40,6 @@ OPTIONS:
 
 1. cargo install closewait
 2. Download the binary from [closewait/releases](https://github.com/detailyang/closewait/releases)
-
 
 # License
 closewait is under the [MIT license](/LICENSE). See the [LICENSE](/LICENSE) file for details.
