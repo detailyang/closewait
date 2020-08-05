@@ -22,7 +22,7 @@ before_install:
 install:
   - docker run --rm -v $(pwd):/app docker.io/detailyang/centos7:1.0.1 bash -c " scl enable llvm-toolset-7.0 /app/.ci/build.sh"
   - sudo mv target/release/closewait "target/release/closewait-centos7-amd64"
-  - cargo build --release
+  - sudo cargo build --release
   - sudo mv target/release/closewait "target/release/closewait-ubuntu-amd64"
 before_deploy:
 deploy:
