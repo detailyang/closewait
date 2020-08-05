@@ -25,10 +25,7 @@ impl App {
     pub fn close_closewait_sockets(&self) -> Result<()> {
         let sockets = self.get_closewait_sockets()?;
         let fds: Vec<_> = sockets.iter().map(|(inode, info)| info.fd).collect();
-
-        let iter = fds.chunks(self.opt.batch);
-        iter.into_iter().for_each(|fds| {
-            let b: Vec<_> = fds.into_iter().take(self.opt.batch as usize).collect();
+        fds.chunks(self.opt.batch).into_iter().for_each(|fds| {
             let now = Instant::now();
 
             do_close(self.opt.pid, fds.to_vec());
@@ -39,14 +36,14 @@ impl App {
                 println!(
                     "close pid({}) with {:?} sockets took {} milliseconds",
                     self.opt.pid,
-                    b.len(),
+                    fds.len(),
                     elapsed.as_millis()
                 );
             } else {
                 println!(
                     "close pid({}) with {} sockets took {} milliseconds",
                     self.opt.pid,
-                    b.len(),
+                    fds.len(),
                     elapsed.as_millis()
                 );
             }
@@ -61,10 +58,12 @@ impl App {
     }
 
     pub fn get_sockets(&self, state: TcpState) -> Result<HashMap<u32, FDInfo>> {
-        let tcp = procfs::net::tcp()?;
-        let tcp6 = procfs::net::tcp6()?;
+        let tcp = procfs::net::tcp().unwrap_or(vec![]);
+        let tcp6 = procfs::net::tcp6().unwrap_or(vec![]);
         let p = process::Process::new(self.opt.pid)?;
         let mut inodes = HashMap::<u32, FDInfo>::new();
+        let mut closewait_sockets = HashMap::<u32, FDInfo>::new();
+
         p.fd().iter().for_each(|fdinfo| {
             fdinfo.iter().for_each(|fd| match fd.target {
                 process::FDTarget::Socket(inode) => {
@@ -78,12 +77,12 @@ impl App {
             .chain(tcp6)
             .filter(|t| return t.state == state)
             .for_each(|entry| {
-                if let Some(_) = inodes.get(&entry.inode) {
-                    inodes.remove(&entry.inode);
+                if let Some(info) = inodes.get(&entry.inode) {
+                    closewait_sockets.insert(entry.inode, info.clone());
                 }
             });
 
-        Ok(inodes)
+        Ok(closewait_sockets)
     }
 }
 
