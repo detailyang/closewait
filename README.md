@@ -11,7 +11,7 @@
 
 # Purpose
 
-Kill the close-wait sockets via [procfs](https://man7.org/linux/man-pages//man5/procfs.5.html) in low version kernel which is do not have [SOCK Destory](https://lwn.net/Articles/666592/) feature.
+Kill the close-wait sockets via [procfs](https://man7.org/linux/man-pages//man5/procfs.5.html) like `ss state CLOSE-WAIT --kill` in low version kernel which is do not have [SOCK Destory](https://lwn.net/Articles/666592/) kernel feature.
 
 # Usage
 
@@ -20,6 +20,20 @@ Kill the close-wait sockets via [procfs](https://man7.org/linux/man-pages//man5/
 `closewait -p pid`
 
 ```bash
+closewait 0.1.0
+
+USAGE:
+    closewait [FLAGS] [OPTIONS] --pid <pid>
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+    -v, --verbose    Enable verbose mode
+
+OPTIONS:
+    -b, --batch <batch>          The number of sockets batch close [default: 1024]
+    -i, --interval <interval>    The interval to close sockets [default: 1s]
+    -p, --pid <pid>
 ```
 
 # Install
