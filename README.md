@@ -27,6 +27,7 @@ Kill the close-wait sockets via [procfs](https://man7.org/linux/man-pages//man5/
 1. cargo install closewait
 2. Download the binary from [closewait/releases](https://github.com/detailyang/closewait/releases)
 
+> only support linux
 
 # License
 closewait is under the [MIT license](/LICENSE). See the [LICENSE](/LICENSE) file for details.

@@ -1,5 +1,4 @@
-#! /bin/bash
+#! /bin/bash -x
 
 cd /app
-scl enable llvm-toolset-7.0 bash
 cargo build --release
