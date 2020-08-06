@@ -1,5 +1,4 @@
 mod app;
-use colored::Colorize;
 use structopt::StructOpt;
 
 fn main() {

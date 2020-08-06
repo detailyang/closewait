@@ -1,16 +1,12 @@
-use anyhow::{Context, Result};
-use colored::*;
+use anyhow::{Result};
 use humantime::parse_duration;
 use procfs::net::TcpState;
 use procfs::process;
 use procfs::process::FDInfo;
-use procfs::process::MountOptFields::PropagateFrom;
 use ptrace_do_rs::*;
-use std::collections::{HashMap, HashSet};
-use std::path::PathBuf;
-use std::rc::Rc;
+use std::collections::{HashMap};
 use std::time;
-use std::time::{Duration, Instant};
+use std::time::{Instant};
 use structopt::StructOpt;
 
 pub struct App {
@@ -24,7 +20,7 @@ impl App {
 
     pub fn close_closewait_sockets(&self) -> Result<()> {
         let sockets = self.get_closewait_sockets()?;
-        let fds: Vec<_> = sockets.iter().map(|(inode, info)| info.fd).collect();
+        let fds: Vec<_> = sockets.iter().map(|(_, info)| info.fd).collect();
         fds.chunks(self.opt.batch).into_iter().for_each(|fds| {
             let now = Instant::now();
 
