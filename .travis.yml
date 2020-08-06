@@ -18,7 +18,7 @@ services:
 
 before_install:
   - docker pull docker.io/detailyang/centos7:1.0.1
-  - sudo apt-get install -y clang llvm clang-format clang-tidy clang-tools clang
+  - sudo apt-get install -y clang llvm 
 
 install:
   - docker run --rm -v $(pwd):/app docker.io/detailyang/centos7:1.0.1 bash -c " scl enable llvm-toolset-7.0 /app/.ci/build.sh"
