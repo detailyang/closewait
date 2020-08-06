@@ -20,7 +20,7 @@ before_install:
   - docker pull docker.io/detailyang/centos7:1.0.1
   - sudo apt-get install -y clang llvm 
 
-install:
+script:
   - docker run --rm -v $(pwd):/app docker.io/detailyang/centos7:1.0.1 bash -c " scl enable llvm-toolset-7.0 /app/.ci/build.sh"
   - sudo mv target/release/closewait "target/release/closewait-centos7-amd64"
   - sudo /home/travis/.cargo/bin/cargo build --release
