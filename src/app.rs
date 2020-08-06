@@ -58,8 +58,8 @@ impl App {
     }
 
     pub fn get_sockets(&self, state: TcpState) -> Result<HashMap<u32, FDInfo>> {
-        let tcp = procfs::net::tcp().unwrap_or(vec![]);
-        let tcp6 = procfs::net::tcp6().unwrap_or(vec![]);
+        let tcp = procfs::net::tcp().unwrap_or_else(|_| vec![]);
+        let tcp6 = procfs::net::tcp6().unwrap_or_else(|_| vec![]);
         let p = process::Process::new(self.opt.pid)?;
         let mut inodes = HashMap::<u32, FDInfo>::new();
         let mut closewait_sockets = HashMap::<u32, FDInfo>::new();
