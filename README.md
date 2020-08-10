@@ -37,10 +37,9 @@ OPTIONS:
 
 # Install
 
-1. cargo install closewait
-2. Download the binary from [closewait/releases](https://github.com/detailyang/closewait/releases)
+Download the binary from [closewait/releases](https://github.com/detailyang/closewait/releases)
 
-> only support linux
+> only support linux platform
 
 # License
 closewait is under the [MIT license](/LICENSE). See the [LICENSE](/LICENSE) file for details.
