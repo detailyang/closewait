@@ -1,0 +1,38 @@
+language: rust
+sudo: true
+os:
+  - linux
+dist: focal
+arch:
+    - amd64
+rust:
+  - stable
+matrix:
+  allow_failures:
+    - rust: nightly
+  fast_finish: true
+jobs:
+  fast_finish: true
+services:
+  - docker
+
+before_install:
+  - docker pull docker.io/detailyang/centos7:1.0.1
+
+install:
+  - which cargo
+  - docker run --rm -v $(pwd):/app docker.io/detailyang/centos7:1.0.1 bash -c " scl enable llvm-toolset-7.0 /app/.ci/build.sh"
+  - sudo mv target/release/closewait "target/release/closewait-centos7-amd64"
+  - sudo /home/travis/.cargo/bin/cargo build --release
+  - sudo mv target/release/closewait "target/release/closewait-ubuntu-amd64"
+before_deploy:
+deploy:
+  - provider: releases
+    api_key: "$GH_TOKEN"
+    skip_cleanup: true
+    on:
+      tags: on
+      condition: "$TRAVIS_RUST_VERSION = stable"
+      branch: master
+    file_glob: true # <-- note this new field
+    file: target/release/closewait-*  # <-- note the `-*`
